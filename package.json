@@ -1,0 +1,29 @@
+{
+  "name": "ukrainian-audio",
+  "version": "1.0.0",
+  "description": "Ukrainian audio recognition",
+  "main": "index.html",
+  "author": "Lyceum #141 ORT in Kyiv, Ukraine",
+  "dependencies": {
+    "@tensorflow-models/speech-commands": "^0.5.4",
+    "@tensorflow/tfjs": "^3.21.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "fs": "^0.0.1-security",
+    "process": "^0.11.10",
+    "util": "^0.12.5",
+    "wav-spectrogram": "^0.0.4"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "private": true,
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
+}
