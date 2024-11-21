@@ -8,12 +8,12 @@ const colormap = require('colormap');
 // https://github.com/tensorflow/tfjs-models/tree/master/speech-commands
 
 // the link to your model provided by Teachable Machine export panel
-// const URL = "http://localhost:63342/School/audio/dist/vowels_and_consonants/";
+// const URL = "http://localhost:63342/School/audio/docs/";
 const URL = "http://www.rmn.pp.ua/ukrainian_audio_recognition/vowels_and_consonants/";
 
-async function createModel() {
-    const checkpointURL = URL + "model.json"; // model topology
-    const metadataURL = URL + "metadata.json"; // model metadata
+async function createModel(model) {
+    const checkpointURL = URL + model + "model.json"; // model topology
+    const metadataURL = URL + model + "metadata.json"; // model metadata
 
     const recognizer = speechCommands.create(
         "BROWSER_FFT", // fourier transform type, not useful to change
@@ -28,8 +28,11 @@ async function createModel() {
 }
 
 async function init() {
-    const recognizer = await createModel();
-    const classLabels = recognizer.wordLabels(); // get class labels
+    const recognizerVowelsConsonants = await createModel("vowels_and_consonants/");
+    const recognizer2 = await createModel("vowels_and_consonants/");
+
+    const classLabels = recognizerVowelsConsonants.wordLabels(); // get class labels
+
     const labelContainer = document.getElementById("label-container");
     const mostProbableContainer = document.getElementById("most-probable");
     const button = document.getElementById("startbutton");
@@ -45,7 +48,7 @@ async function init() {
     // listen() takes two arguments:
     // 1. A callback function that is invoked anytime a word is recognized.
     // 2. A configuration object with adjustable fields
-    recognizer.listen(result => {
+    recognizerVowelsConsonants.listen(result => {
         const scores = result.scores; // probability of prediction for each class
         // render the probability scores per class
         for (let i = 0; i < classLabels.length; i++) {
@@ -61,6 +64,14 @@ async function init() {
             mostProbableContainer.innerHTML = classLabels[maxScoreIndex];
 
             drawSpectrogram(result.spectrogram, canvasElem);
+
+            const output = recognizer2.recognize(result.spectrogram.data);
+            output.then((output) => {
+                for (let i = 0; i < classLabels.length; i++) {
+                    const classPrediction = classLabels[i] + ": " + result.scores[i].toFixed(2);
+                    console.log(classPrediction);
+                }
+            });
         }
 
     }, {
