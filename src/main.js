@@ -8,7 +8,8 @@ const colormap = require('colormap');
 // https://github.com/tensorflow/tfjs-models/tree/master/speech-commands
 
 // the link to your model provided by Teachable Machine export panel
-const URL = "http://localhost:63342/School/audio/dist/vowels_and_consonants/";
+// const URL = "http://localhost:63342/School/audio/dist/vowels_and_consonants/";
+const URL = "http://www.rmn.pp.ua/ukrainian_audio_recognition/vowels_and_consonants/";
 
 async function createModel() {
     const checkpointURL = URL + "model.json"; // model topology
