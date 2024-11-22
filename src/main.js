@@ -9,7 +9,7 @@ const colormap = require('colormap');
 
 // the link to your model provided by Teachable Machine export panel
 // const URL = "http://localhost:63342/School/audio/docs/";
-const URL = "http://www.rmn.pp.ua/ukrainian_audio_recognition/vowels_and_consonants/";
+const URL = "https://www.rmn.pp.ua/ukrainian_audio_recognition/vowels_and_consonants/";
 
 async function createModel(model) {
     const checkpointURL = URL + model + "model.json"; // model topology
