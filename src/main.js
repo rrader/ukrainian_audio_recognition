@@ -8,8 +8,8 @@ const colormap = require('colormap');
 // https://github.com/tensorflow/tfjs-models/tree/master/speech-commands
 
 // the link to your model provided by Teachable Machine export panel
-// const URL = "http://localhost:63342/School/audio/docs/";
-const URL = "https://www.rmn.pp.ua/ukrainian_audio_recognition/";
+const URL = "http://localhost:63342/School/audio/docs/";
+// const URL = "https://www.rmn.pp.ua/ukrainian_audio_recognition/";
 
 async function createModel(model) {
     const checkpointURL = URL + model + "model.json"; // model topology
@@ -29,60 +29,73 @@ async function createModel(model) {
 
 async function init() {
     const recognizerVowelsConsonants = await createModel("vowels_and_consonants/");
-    const recognizer2 = await createModel("vowels_and_consonants/");
+    const recognizerVowelsHigh = await createModel("vowels_high/");
+    const recognizerVowelsRow = await createModel("vowels_row/");
 
-    const classLabels = recognizerVowelsConsonants.wordLabels(); // get class labels
-
-    const labelContainer = document.getElementById("label-container");
-    const mostProbableContainer = document.getElementById("most-probable");
+    const mostProbableContainerVC = document.getElementById("most-probable-vc");
     const button = document.getElementById("startbutton");
     const canvasElem = document.getElementById('spectrogram');
 
     // set button text
     button.innerHTML = "Listening...";
 
-    for (let i = 0; i < classLabels.length; i++) {
-        labelContainer.appendChild(document.createElement("div"));
-    }
-
-    // listen() takes two arguments:
-    // 1. A callback function that is invoked anytime a word is recognized.
-    // 2. A configuration object with adjustable fields
     recognizerVowelsConsonants.listen(result => {
         const scores = result.scores; // probability of prediction for each class
         // render the probability scores per class
-        for (let i = 0; i < classLabels.length; i++) {
-            const classPrediction = classLabels[i] + ": " + result.scores[i].toFixed(2);
-            labelContainer.childNodes[i].innerHTML = classPrediction;
-        }
+        const classLabels = recognizerVowelsConsonants.wordLabels(); // get class labels
 
         const maxScore = Math.max(...scores);
         const maxScoreIndex = scores.indexOf(maxScore);
 
-        if ((maxScore > 0.8) && classLabels[maxScoreIndex] !== "Background Noise") {
+        if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
-            mostProbableContainer.innerHTML = classLabels[maxScoreIndex];
+            mostProbableContainerVC.innerHTML = classLabels[maxScoreIndex];
 
             drawSpectrogram(result.spectrogram, canvasElem);
-
-            const output = recognizer2.recognize(result.spectrogram.data);
-            output.then((output) => {
-                for (let i = 0; i < classLabels.length; i++) {
-                    const classPrediction = classLabels[i] + ": " + result.scores[i].toFixed(2);
-                    console.log(classPrediction);
-                }
-            });
         }
 
     }, {
         includeSpectrogram: true, // in case listen should return result.spectrogram
-        probabilityThreshold: 0.9,
+        probabilityThreshold: 0.7,
         invokeCallbackOnNoiseAndUnknown: false,
         overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
     });
 
-    // Stop the recognition in 5 seconds.
-    // setTimeout(() => recognizer.stopListening(), 5000);
+    recognizerVowelsHigh.listen(result => {
+        const scores = result.scores; // probability of prediction for each class
+        // render the probability scores per class
+        const classLabels = recognizerVowelsHigh.wordLabels(); // get class labels
+
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+
+        if (classLabels[maxScoreIndex] !== "Background Noise") {
+            console.log(classLabels[maxScoreIndex]);
+        }
+    }, {
+        includeSpectrogram: false, // in case listen should return result.spectrogram
+        probabilityThreshold: 0.5,
+        invokeCallbackOnNoiseAndUnknown: false,
+        overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
+    });
+
+    recognizerVowelsRow.listen(result => {
+        const scores = result.scores; // probability of prediction for each class
+        // render the probability scores per class
+        const classLabels = recognizerVowelsRow.wordLabels(); // get class labels
+
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+
+        if (classLabels[maxScoreIndex] !== "Background Noise") {
+            console.log(classLabels[maxScoreIndex]);
+        }
+    }, {
+        includeSpectrogram: false, // in case listen should return result.spectrogram
+        probabilityThreshold: 0.5,
+        invokeCallbackOnNoiseAndUnknown: false,
+        overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
+    });
 }
 
 // from wav-spectrogram.js
@@ -94,7 +107,7 @@ async function drawSpectrogram(data, canvasElem) {
     const ctx = canvasElem.getContext("2d");
 
     const frames = data.data.length / data.frameSize;
-    console.log("Frames: " + frames, data.frameSize);
+
     const specWidth = frames;
     const specHeight = data.frameSize / 2;
     ctx.setTransform(1, 0, 0, 1, 0, 0);
