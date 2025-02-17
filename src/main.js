@@ -31,6 +31,8 @@ async function init() {
     const recognizerVowelsConsonants = await createModel("vowels_and_consonants/");
     const recognizerVowelsHigh = await createModel("vowels_high/");
     const recognizerVowelsRow = await createModel("vowels_row/");
+    const recognizerZybniGybni = await createModel("zybni_gybni/");
+    const recognizerGlyhiDzvinki = await createModel("glyhi_dzvinki/");
 
     const mostProbableContainerVC = document.getElementById("most-probable-vc");
     const button = document.getElementById("startbutton");
@@ -95,6 +97,40 @@ async function init() {
         probabilityThreshold: 0.5,
         invokeCallbackOnNoiseAndUnknown: false,
         overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
+    });
+
+    recognizerZybniGybni.listen(result => {
+        const scores = result.scores;
+        const classLabels = recognizerZybniGybni.wordLabels();
+
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+
+        if (classLabels[maxScoreIndex] !== "Background Noise") {
+            console.log(classLabels[maxScoreIndex]);
+        }
+    }, {
+        includeSpectrogram: false,
+        probabilityThreshold: 0.5,
+        invokeCallbackOnNoiseAndUnknown: false,
+        overlapFactor: 0.50
+    });
+
+    recognizerGlyhiDzvinki.listen(result => {
+        const scores = result.scores;
+        const classLabels = recognizerGlyhiDzvinki.wordLabels();
+
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+
+        if (classLabels[maxScoreIndex] !== "Background Noise") {
+            console.log(classLabels[maxScoreIndex]);
+        }
+    }, {
+        includeSpectrogram: false,
+        probabilityThreshold: 0.5,
+        invokeCallbackOnNoiseAndUnknown: false,
+        overlapFactor: 0.50
     });
 }
 
