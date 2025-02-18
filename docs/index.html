@@ -1,15 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Розпізнавання звуків</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .active {
+            background-color: green;
+            color: white;
+        }
+        .inactive {
+            background-color: gray;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-
-    <div>Розпізнавання звуків української мови</div>
+    <h2>Розпізнавання звуків української мови</h2>
     <button type="button" id="startbutton">Start</button>
-    <div id="most-probable-vc"></div>
-
+    <table>
+        <tr>
+            <th>Група</th>
+            <th>Категорія</th>
+            <th>Стан</th>
+        </tr>
+        <tr>
+            <tr>
+                <td colspan="2">Загальна категорія</td>
+                <td id="most-probable-vc" class="inactive" colspan="2">Не визначено</td>
+            </tr>
+            <td rowspan="2">Голосні</td>
+            <td>Високі</td>
+            <td id="most-probable-high" class="inactive">Не визначено</td>
+        </tr>
+        <tr>
+            <td>Рядові</td>
+            <td id="most-probable-row" class="inactive">Не визначено</td>
+        </tr>
+        <tr>
+            <td rowspan="2">Приголосні</td>
+            <td>Глухі/дзвінкі</td>
+            <td id="most-probable-glyhi" class="inactive">Не визначено</td>
+        </tr>
+        <tr>
+            <td>Зубні/губні</td>
+            <td id="most-probable-zybni" class="inactive">Не визначено</td>
+        </tr>
+    </table>
     <canvas id="spectrogram"></canvas>
 
     <script type="text/javascript" src="main.js"></script>

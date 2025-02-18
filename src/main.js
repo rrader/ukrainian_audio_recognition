@@ -35,6 +35,10 @@ async function init() {
     const recognizerGlyhiDzvinki = await createModel("glyhi_dzvinki/");
 
     const mostProbableContainerVC = document.getElementById("most-probable-vc");
+    const mostProbableContainerHigh = document.getElementById("most-probable-high");
+    const mostProbableContainerRow = document.getElementById("most-probable-row");
+    const mostProbableContainerZybni = document.getElementById("most-probable-zybni");
+    const mostProbableContainerGlyhi = document.getElementById("most-probable-glyhi");
     const button = document.getElementById("startbutton");
     const canvasElem = document.getElementById('spectrogram');
 
@@ -73,6 +77,8 @@ async function init() {
 
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
+            mostProbableContainerHigh.innerHTML = classLabels[maxScoreIndex];
+
         }
     }, {
         includeSpectrogram: false, // in case listen should return result.spectrogram
@@ -91,6 +97,7 @@ async function init() {
 
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
+            mostProbableContainerRow.innerHTML = classLabels[maxScoreIndex];
         }
     }, {
         includeSpectrogram: false, // in case listen should return result.spectrogram
@@ -108,6 +115,7 @@ async function init() {
 
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
+            mostProbableContainerZybni.innerHTML = classLabels[maxScoreIndex];
         }
     }, {
         includeSpectrogram: false,
@@ -125,6 +133,7 @@ async function init() {
 
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
+            mostProbableContainerGlyhi.innerHTML = classLabels[maxScoreIndex];
         }
     }, {
         includeSpectrogram: false,
