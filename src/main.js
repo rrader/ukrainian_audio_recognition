@@ -183,7 +183,7 @@ async function drawSpectrogram(data, canvasElem) {
 
 }
 
-function updateState(category, subcategory, value) {
+function updateState(category, subcategories) {
     let generalCategoryElement = document.getElementById("most-probable-vc");
     let vowelCategories = { "most-probable-high": "Висота", "most-probable-row": "Ряд" };
     let consonantCategories = { "most-probable-zybni": "Зубні/губні", "most-probable-glyhi": "Глухі/дзвінкі" };
@@ -196,17 +196,19 @@ function updateState(category, subcategory, value) {
         el.textContent = "Не визначено";
     });
     
-    if (generalCategoryElement) {
+    if (category !== "Не визначено") {
         generalCategoryElement.classList.remove('inactive');
         generalCategoryElement.classList.add('active');
         generalCategoryElement.textContent = category;
-    }
-    
-    if (subcategory && document.getElementById(subcategory)) {
-        let subcategoryElement = document.getElementById(subcategory);
-        subcategoryElement.classList.remove('inactive');
-        subcategoryElement.classList.add('active');
-        subcategoryElement.textContent = value;
+        
+        subcategories.forEach(subcat => {
+            let element = document.getElementById(subcat.id);
+            if (element && subcat.value !== "Не визначено") {
+                element.classList.remove('inactive');
+                element.classList.add('active');
+                element.textContent = subcat.value;
+            }
+        });
     }
 }
 
@@ -226,60 +228,47 @@ async function init() {
         
         if (detectedClass !== "Background Noise") {
             if (detectedClass === "Голосні") {
-                updateState("Голосні", null, detectedClass);
+                updateState("Голосні", []);
             } else if (detectedClass === "Приголосні") {
-                updateState("Приголосні", null, detectedClass);
+                updateState("Приголосні", []);
             }
         }
-    }, { probabilityThreshold: 0.75, overlapFactor: 0.60 });
+    }, { probabilityThreshold: 0.8, overlapFactor: 0.50 });
 
     recognizerVowelsHigh.listen(result => {
-        const scores = result.scores;
-        const classLabels = recognizerVowelsHigh.wordLabels();
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
-        const detectedClass = classLabels[maxScoreIndex];
-        
+        const detectedClass = recognizerVowelsHigh.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
         if (detectedClass !== "Background Noise") {
-            updateState("Голосні", "most-probable-high", detectedClass);
+            updateState("Голосні", [{ id: "most-probable-high", value: detectedClass }]);
         }
-    }, { probabilityThreshold: 0.6, overlapFactor: 0.60 });
+    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
 
     recognizerVowelsRow.listen(result => {
-        const scores = result.scores;
-        const classLabels = recognizerVowelsRow.wordLabels();
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
-        const detectedClass = classLabels[maxScoreIndex];
-        
+        const detectedClass = recognizerVowelsRow.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
         if (detectedClass !== "Background Noise") {
-            updateState("Голосні", "most-probable-row", detectedClass);
+            updateState("Голосні", [{ id: "most-probable-row", value: detectedClass }]);
         }
-    }, { probabilityThreshold: 0.6, overlapFactor: 0.60 });
+    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
 
     recognizerZybniGybni.listen(result => {
-        const scores = result.scores;
-        const classLabels = recognizerZybniGybni.wordLabels();
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
-        const detectedClass = classLabels[maxScoreIndex];
-        
+        const detectedClass = recognizerZybniGybni.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
         if (detectedClass !== "Background Noise") {
-            updateState("Приголосні", "most-probable-zybni", detectedClass);
+            updateState("Приголосні", [
+                { id: "most-probable-zybni", value: detectedClass },
+                { id: "most-probable-glyhi", value: "Не визначено" }
+            ]);
         }
-    }, { probabilityThreshold: 0.6, overlapFactor: 0.60 });
+    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
 
     recognizerGlyhiDzvinki.listen(result => {
-        const scores = result.scores;
-        const classLabels = recognizerGlyhiDzvinki.wordLabels();
-        const maxScore = Math.max(...scores);
-        const maxScoreIndex = scores.indexOf(maxScore);
-        const detectedClass = classLabels[maxScoreIndex];
-        
+        const detectedClass = recognizerGlyhiDzvinki.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
         if (detectedClass !== "Background Noise") {
-            updateState("Приголосні", "most-probable-glyhi", detectedClass);
+            updateState("Приголосні", [
+                { id: "most-probable-glyhi", value: detectedClass },
+                { id: "most-probable-zybni", value: "Не визначено" }
+            ]);
         }
-    }, { probabilityThreshold: 0.6, overlapFactor: 0.60 });
+    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
 }
 
 document.getElementById('startbutton').addEventListener('click', init);
+
