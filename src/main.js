@@ -1,3 +1,82 @@
+
+async function createModel(model) {
+    const checkpointURL = URL + model + "model.json";
+    const metadataURL = URL + model + "metadata.json";
+
+    const recognizer = speechCommands.create(
+        "BROWSER_FFT", 
+        undefined, 
+        checkpointURL,
+        metadataURL);
+
+    await recognizer.ensureModelLoaded();
+    return recognizer;
+}
+
+function scaleAcrossRange(x, max, min) {
+    return (x - min) / (max - min);
+}
+
+async function drawSpectrogram(data, canvasElem) {
+    if (!data) {
+        console.log("No spectrogram data received");
+        return;
+    }
+    console.log("Spectrogram data:", data);
+    const ctx = canvasElem.getContext("2d");
+    const frames = data.data.length / data.frameSize;
+    const specWidth = frames;
+    const specHeight = data.frameSize / 2;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(canvasElem.width / specWidth, canvasElem.height / specHeight);
+    
+    const colours = colormap({ colormap: 'jet', nshades: 255, format: 'hex' });
+    
+    let maxValue = 0, minValue = 0;
+    for (let a = 0; a < data.data.length; a++) {
+        maxValue = Math.max(data.data[a], maxValue);
+        minValue = Math.min(data.data[a], minValue);
+    }
+    
+    for (let o = 0; o < frames; o++) {
+        for (let p = 0; p < data.frameSize; p++) {
+            let scaledValue = Math.round(255 * scaleAcrossRange(data.data[o * data.frameSize + p], maxValue, minValue));
+            ctx.fillStyle = colours[scaledValue];
+            ctx.fillRect(o, p, 1, 1);
+        }
+    }
+}
+
+async function init() {
+    const recognizerVowelsConsonants = await createModel("vowels_and_consonants/");
+    const canvasElem = document.getElementById('spectrogram');
+    
+    recognizerVowelsConsonants.listen(result => {
+        console.log("Recognition result:", result);
+        if (result.spectrogram) {
+            drawSpectrogram(result.spectrogram, canvasElem);
+        } else {
+            console.log("No spectrogram received in result");
+        }
+    }, {
+        includeSpectrogram: true,
+        probabilityThreshold: 0.7,
+        invokeCallbackOnNoiseAndUnknown: false,
+        overlapFactor: 0.50
+    });
+}
+
+document.getElementById('startbutton').addEventListener('click', init);
+
+
+
+
+
+
+
+
+
+
 const tf = require('@tensorflow/tfjs');
 const speechCommands = require('@tensorflow-models/speech-commands');
 const {listeners} = require("process");
@@ -183,6 +262,7 @@ async function drawSpectrogram(data, canvasElem) {
 
 }
 
+
 function updateState(category, subcategories) {
     let generalCategoryElement = document.getElementById("most-probable-vc");
     let vowelCategories = { "most-probable-high": "Висота", "most-probable-row": "Ряд" };
@@ -201,12 +281,12 @@ function updateState(category, subcategories) {
         generalCategoryElement.classList.add('active');
         generalCategoryElement.textContent = category;
         
-        subcategories.forEach(subcat => {
-            let element = document.getElementById(subcat.id);
-            if (element && subcat.value !== "Не визначено") {
-                element.classList.remove('inactive');
-                element.classList.add('active');
-                element.textContent = subcat.value;
+        subcategories.forEach(subcategory => {
+            let subcategoryElement = document.getElementById(subcategory.id);
+            if (subcategoryElement) {
+                subcategoryElement.classList.remove('inactive');
+                subcategoryElement.classList.add('active');
+                subcategoryElement.textContent = subcategory.value;
             }
         });
     }
@@ -233,42 +313,97 @@ async function init() {
                 updateState("Приголосні", []);
             }
         }
-    }, { probabilityThreshold: 0.8, overlapFactor: 0.50 });
+    }, { probabilityThreshold: 0.8, overlapFactor: 0.60 });
 
     recognizerVowelsHigh.listen(result => {
-        const detectedClass = recognizerVowelsHigh.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
+        const scores = result.scores;
+        const classLabels = recognizerVowelsHigh.wordLabels();
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+        const detectedClass = classLabels[maxScoreIndex];
+        
         if (detectedClass !== "Background Noise") {
-            updateState("Голосні", [{ id: "most-probable-high", value: detectedClass }]);
+            updateState("Голосні", [
+                { id: "most-probable-high", value: detectedClass },
+                { id: "most-probable-row", value: document.getElementById("most-probable-row").textContent }
+            ]);
         }
-    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
+    }, { probabilityThreshold: 0.7, overlapFactor: 0.60 });
 
     recognizerVowelsRow.listen(result => {
-        const detectedClass = recognizerVowelsRow.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
+        const scores = result.scores;
+        const classLabels = recognizerVowelsRow.wordLabels();
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+        const detectedClass = classLabels[maxScoreIndex];
+        
         if (detectedClass !== "Background Noise") {
-            updateState("Голосні", [{ id: "most-probable-row", value: detectedClass }]);
+            updateState("Голосні", [
+                { id: "most-probable-row", value: detectedClass },
+                { id: "most-probable-high", value: document.getElementById("most-probable-high").textContent }
+            ]);
         }
-    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
+    }, { probabilityThreshold: 0.7, overlapFactor: 0.60 });
 
     recognizerZybniGybni.listen(result => {
-        const detectedClass = recognizerZybniGybni.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
+        const scores = result.scores;
+        const classLabels = recognizerZybniGybni.wordLabels();
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+        const detectedClass = classLabels[maxScoreIndex];
+        
         if (detectedClass !== "Background Noise") {
             updateState("Приголосні", [
                 { id: "most-probable-zybni", value: detectedClass },
-                { id: "most-probable-glyhi", value: "Не визначено" }
+                { id: "most-probable-glyhi", value: document.getElementById("most-probable-glyhi").textContent }
             ]);
         }
-    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
+    }, { probabilityThreshold: 0.7, overlapFactor: 0.60 });
 
     recognizerGlyhiDzvinki.listen(result => {
-        const detectedClass = recognizerGlyhiDzvinki.wordLabels()[result.scores.indexOf(Math.max(...result.scores))];
+        const scores = result.scores;
+        const classLabels = recognizerGlyhiDzvinki.wordLabels();
+        const maxScore = Math.max(...scores);
+        const maxScoreIndex = scores.indexOf(maxScore);
+        const detectedClass = classLabels[maxScoreIndex];
+        
         if (detectedClass !== "Background Noise") {
             updateState("Приголосні", [
                 { id: "most-probable-glyhi", value: detectedClass },
-                { id: "most-probable-zybni", value: "Не визначено" }
+                { id: "most-probable-zybni", value: document.getElementById("most-probable-zybni").textContent }
             ]);
         }
-    }, { probabilityThreshold: 0.65, overlapFactor: 0.50 });
+    }, { probabilityThreshold: 0.7, overlapFactor: 0.60 });
 }
 
 document.getElementById('startbutton').addEventListener('click', init);
 
+const style = document.createElement("style");
+style.textContent = `
+.active {
+    animation: fadeIn 1.5s ease-out forwards, highlight 3s ease-in-out 1.5s forwards;
+    transition: color 2.5s ease-in-out;
+}
+
+.inactive {
+    animation: fadeOut 1s ease-out forwards;
+    transition: color 1.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0.5; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0.9; }
+}
+
+@keyframes highlight {
+    0% { color: #a3e635; } /* Светло-зелёный */
+    40% { color: #a3e635; } /* Держим светло
+
+
+`;
+document.head.appendChild(style);
