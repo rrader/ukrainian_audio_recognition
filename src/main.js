@@ -71,12 +71,6 @@ document.getElementById('startbutton').addEventListener('click', init);
 
 
 
-
-
-
-
-
-
 const tf = require('@tensorflow/tfjs');
 const speechCommands = require('@tensorflow-models/speech-commands');
 const {listeners} = require("process");
@@ -407,3 +401,4 @@ style.textContent = `
 
 `;
 document.head.appendChild(style);
+
