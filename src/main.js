@@ -375,13 +375,15 @@ document.getElementById('startbutton').addEventListener('click', init);
 const style = document.createElement("style");
 style.textContent = `
 .active {
-    animation: fadeIn 1.5s ease-out forwards, highlight 3s ease-in-out 1.5s forwards;
+    animation: fadeIn 1.5s ease-out forwards, glowEffect 3s ease-in-out 1.5s forwards;
     transition: color 2.5s ease-in-out;
+    text-shadow: 0 0 12px rgba(0, 255, 200, 0.8), 0 0 20px rgba(120, 70, 255, 0.6);
 }
 
 .inactive {
     animation: fadeOut 1s ease-out forwards;
     transition: color 1.5s ease-out;
+    text-shadow: none;
 }
 
 @keyframes fadeIn {
@@ -394,11 +396,9 @@ style.textContent = `
     to { opacity: 0.9; }
 }
 
-@keyframes highlight {
-    0% { color: #a3e635; } /* Светло-зелёный */
-    40% { color: #a3e635; } /* Держим светло
-
-
+@keyframes glowEffect {
+    0% { color: rgb(0, 255, 200); text-shadow: 0 0 15px rgba(0, 255, 200, 0.8); }
+    100% { color: rgb(187, 163, 254); text-shadow: 0 0 25px rgba(120, 70, 255, 0.6); }
+}
 `;
 document.head.appendChild(style);
-

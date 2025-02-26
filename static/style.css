@@ -1,0 +1,221 @@
+/* Общие стили */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f0c29, #25254b, #24243e);
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Улучшенный анимированный фон с плавными, ненавязчивыми переходами */
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 40% 60%; }
+    50% { background-position: 80% 40%; }
+    75% { background-position: 40% 80%; }
+    100% { background-position: 0% 50%; }
+}
+
+body {
+    background: linear-gradient(135deg, #0f0c29, #25254b, #24243e, #5a3d7a, #3a2d5a);
+    background-size: 600% 600%;
+    animation: gradientAnimation 20s infinite alternate ease-in-out;
+}
+
+/* Мягкие светящиеся частицы с разными размерами и движениями */
+body::before, body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.07;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 5%, transparent 50%);
+    animation: particlesMove 22s infinite alternate ease-in-out;
+}
+
+@keyframes particlesMove {
+    0% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.07; }
+    50% { transform: translateY(-20px) translateX(20px) scale(1.05); opacity: 0.15; }
+    100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.07; }
+}
+
+/* Добавлены мягкие, разнообразные световые волны */
+@keyframes softGlow {
+    0% { box-shadow: 0 0 10px rgba(90, 61, 122, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(90, 61, 122, 0.5); }
+    100% { box-shadow: 0 0 10px rgba(90, 61, 122, 0.3); }
+}
+
+body::after {
+    animation: softGlow 8s infinite alternate ease-in-out;
+}
+
+h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 32px;
+    font-weight: 700;
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.6);
+    animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Кнопка */
+button {
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 10px 20px rgba(255, 75, 75, 0.5);
+    letter-spacing: 1px;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+
+button::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s ease-out;
+}
+
+button:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+button:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 30px rgba(255, 75, 75, 0.7);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+
+/* Таблица */
+table {
+    width: 85%;
+    max-width: 1000px;
+    margin: 40px auto;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+    animation: fadeInUp 2s ease-in-out;
+}
+
+th, td {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 18px;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+    word-wrap: break-word;
+    font-size: 18px;
+    position: relative;
+}
+
+th {
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+/* Стили активных и неактивных состояний */
+.active {
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+    box-shadow: 0 0 20px rgba(40, 167, 69, 0.7);
+    font-size: 20px;
+}
+
+.inactive {
+    background: #6c757d;
+    color: white;
+    transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+    box-shadow: 0 0 15px rgba(108, 117, 125, 0.5);
+    font-size: 18px;
+}
+
+/* Спектрограмма */
+#spectrogram {
+    display: block;
+    margin: 40px auto;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+}
+
+/* Улучшенный стиль для таблицы */
+.category-header {
+    background: rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.general-category {
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    text-align: center;
+    width: 100%;
+    font-size: 22px;
+}
+
+/* Фиксация размеров столбцов */
+th:nth-child(1), td:nth-child(1) {
+    width: 30%;
+}
+th:nth-child(2), td:nth-child(2) {
+    width: 35%;
+}
+th:nth-child(3), td:nth-child(3) {
+    width: 35%;
+}
+
+/* Выравнивание и заполнение пустых ячеек */
+td[colspan] {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: bold;
+    width: 100%;
+    font-size: 20px;
+}
