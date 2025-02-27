@@ -3,25 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Розпізнавання звуків</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 10px;
-        }
-        .active {
-            background-color: green;
-            color: white;
-        }
-        .inactive {
-            background-color: gray;
-            color: white;
-        }
-    </style>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -34,10 +15,10 @@
             <th>Стан</th>
         </tr>
         <tr>
-            <tr>
-                <td colspan="2"><b>Загальна категорія</b></td>
-                <td id="most-probable-vc" class="inactive" colspan="2"></b>Не визначено</b></td>
-            </tr>
+            <td colspan="2"><b>Загальна категорія</b></td>
+            <td id="most-probable-vc" class="inactive">Не визначено</td>
+        </tr>
+        <tr>
             <td rowspan="2">Голосні</td>
             <td>Висота</td>
             <td id="most-probable-high" class="inactive">Не визначено</td>
@@ -57,10 +38,8 @@
         </tr>
     </table>
     
-    <canvas id="spectrogram" width="500" height="200"></canvas>
-
+    <canvas id="spectrogram" width="1000" height="400"></canvas>
 
     <script type="text/javascript" src="main.js"></script>
-
 </body>
 </html>

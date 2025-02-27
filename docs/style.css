@@ -1,4 +1,4 @@
-/* Общие стили */
+
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
 body {
@@ -16,7 +16,6 @@ body {
     animation: fadeIn 2s ease-in-out;
 }
 
-/* Улучшенный анимированный фон с плавными, ненавязчивыми переходами */
 @keyframes gradientAnimation {
     0% { background-position: 0% 50%; }
     25% { background-position: 40% 60%; }
@@ -31,7 +30,7 @@ body {
     animation: gradientAnimation 20s infinite alternate ease-in-out;
 }
 
-/* Мягкие светящиеся частицы с разными размерами и движениями */
+
 body::before, body::after {
     content: "";
     position: fixed;
@@ -52,7 +51,7 @@ body::before, body::after {
     100% { transform: translateY(0px) translateX(0px) scale(1); opacity: 0.07; }
 }
 
-/* Добавлены мягкие, разнообразные световые волны */
+
 @keyframes softGlow {
     0% { box-shadow: 0 0 10px rgba(90, 61, 122, 0.3); }
     50% { box-shadow: 0 0 30px rgba(90, 61, 122, 0.5); }
@@ -79,7 +78,7 @@ h2 {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Кнопка */
+
 button {
     background: linear-gradient(135deg, #ff416c, #ff4b2b);
     color: white;
@@ -124,8 +123,6 @@ button:active {
     transform: scale(0.95);
 }
 
-
-/* Таблица */
 table {
     width: 85%;
     max-width: 1000px;
@@ -137,6 +134,8 @@ table {
     overflow: hidden;
     backdrop-filter: blur(20px);
     animation: fadeInUp 2s ease-in-out;
+    table-layout: fixed;
+
 }
 
 th, td {
@@ -147,6 +146,8 @@ th, td {
     word-wrap: break-word;
     font-size: 18px;
     position: relative;
+    width: 33.33%;
+    height: 50px;
 }
 
 th {
@@ -157,7 +158,7 @@ th {
     letter-spacing: 1px;
 }
 
-/* Стили активных и неактивных состояний */
+
 .active {
     background: #28a745;
     color: white;
@@ -175,7 +176,7 @@ th {
     font-size: 18px;
 }
 
-/* Спектрограмма */
+
 #spectrogram {
     display: block;
     margin: 40px auto;
@@ -185,7 +186,7 @@ th {
     box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
 }
 
-/* Улучшенный стиль для таблицы */
+
 .category-header {
     background: rgba(255, 255, 255, 0.3);
     font-weight: bold;
@@ -200,7 +201,7 @@ th {
     font-size: 22px;
 }
 
-/* Фиксация размеров столбцов */
+
 th:nth-child(1), td:nth-child(1) {
     width: 30%;
 }
@@ -211,7 +212,7 @@ th:nth-child(3), td:nth-child(3) {
     width: 35%;
 }
 
-/* Выравнивание и заполнение пустых ячеек */
+
 td[colspan] {
     text-align: center;
     background: rgba(255, 255, 255, 0.15);
