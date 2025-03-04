@@ -221,62 +221,68 @@ td[colspan] {
     font-size: 20px;
 }
 /* Адаптация для мобильных устройств */
-@media screen and (max-width: 768px) {
+@media (max-width: 1024px) {
     body {
-        padding: 10px;
-        text-align: center;
+        padding: 5px;
+        min-height: 100vh;
+        max-height: 100vh; /* Ограничение высоты страницы */
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        overflow-x: hidden;
-    }
-
-    h2 {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    button {
-        font-size: 16px;
-        padding: 10px 20px;
-        width: 80%;
-        max-width: 300px;
+        justify-content: flex-start;
     }
 
     table {
-        width: 100%;
+        width: 90%;
         max-width: 100%;
-        overflow-x: auto;
-        display: block;
-        font-size: 14px;
-    }
-
-    th, td {
-        padding: 10px;
-        font-size: 14px;
+        margin: 20px auto; /* Увеличенный отступ сверху и снизу */
     }
 
     #spectrogram {
-        width: 100%;
+        width: calc(90% - 20px);
         max-width: 100%;
         height: auto;
-        border-radius: 10px;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    h2 {
-        font-size: 18px;
+        margin: 20px auto; /* Отступы сверху и снизу */
+        display: block;
     }
 
     button {
-        font-size: 14px;
-        padding: 8px 16px;
+        margin: 20px; /* Отступ кнопки сверху */
+            width: 180px; /* Фиксированная ширина */
+            height: 50px; /* Фиксированная высота */
+            white-space: nowrap; /* Предотвращает перенос текста */
+        
+    }
+}
+
+@media (max-width: 768px) {
+    table {
+        width: 95%;
+        margin: 25px auto; /* Чуть больше отступов */
     }
 
-    th, td {
-        font-size: 12px;
-        padding: 6px;
+    #spectrogram {
+        width: calc(95% - 10px);
+        margin: 25px auto; 
+    }
+
+    button {
+        margin: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    table {
+        width: 98%;
+        margin: 30px auto;
+    }
+
+    #spectrogram {
+        width: calc(98% - 5px);
+        margin: 30px auto; 
+    }
+
+    button {
+        margin: 30px;
     }
 }
