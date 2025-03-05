@@ -26,16 +26,13 @@ async function drawSpectrogram(data, canvasElem) {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.scale(canvasElem.width / specWidth, canvasElem.height / specHeight);
     
-    // Улучшение визуализации
     ctx.imageSmoothingEnabled = true;
     ctx.globalAlpha = 0.85;
     ctx.shadowBlur = 2;
     ctx.shadowColor = "rgba(0,0,0,0.3)";
     
-    // Используем сине-фиолетовую цветовую карту с яркими оттенками
     const colours = colormap({ colormap: 'inferno', nshades: 255, format: 'hex' });
     
-    // Вычисляем диапазон значений для нормализации
     let maxValue = 0, minValue = 0;
     for (let a = 0; a < data.data.length; a++) {
         maxValue = Math.max(data.data[a], maxValue);
@@ -45,10 +42,9 @@ async function drawSpectrogram(data, canvasElem) {
     for (let o = 0; o < frames; o++) {
         for (let p = 0; p < data.frameSize; p++) {
             let rawValue = data.data[o * data.frameSize + p];
-            let logValue = Math.log10(1 + rawValue); // Логарифмическое усиление
+            let logValue = Math.log10(1 + rawValue); 
             let scaledValue = Math.round(255 * scaleAcrossRange(logValue, maxValue, minValue));
             
-            // Порог для контраста
             if (scaledValue < 30) continue;
             
             ctx.fillStyle = colours[scaledValue];

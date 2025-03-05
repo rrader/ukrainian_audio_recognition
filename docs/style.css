@@ -220,12 +220,12 @@ td[colspan] {
     width: 100%;
     font-size: 20px;
 }
-/* Адаптация для мобильных устройств */
+
 @media (max-width: 1024px) {
     body {
         padding: 5px;
         min-height: 100vh;
-        max-height: 100vh; /* Ограничение высоты страницы */
+        max-height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -235,39 +235,74 @@ td[colspan] {
     table {
         width: 90%;
         max-width: 100%;
-        margin: 20px auto; /* Увеличенный отступ сверху и снизу */
+        margin: 20px auto; 
     }
 
     #spectrogram {
         width: calc(90% - 20px);
         max-width: 100%;
         height: auto;
-        margin: 20px auto; /* Отступы сверху и снизу */
+        margin: 20px auto;
         display: block;
     }
 
     button {
-        margin: 20px; /* Отступ кнопки сверху */
-            width: 180px; /* Фиксированная ширина */
-            height: 50px; /* Фиксированная высота */
-            white-space: nowrap; /* Предотвращает перенос текста */
-        
+        display: inline-block;
+        width: 260px;
+        height: 50px; 
+        min-width: 180px; 
+        min-height: 50px; 
+        white-space: nowrap; 
+        overflow: hidden;
+        padding: 0; 
+        margin: 20px auto;
+        text-align: center; 
     }
+    
 }
+    td{
+        font-size: clamp(16px, 1.8vw, 18px); 
+    } 
 
 @media (max-width: 768px) {
-    table {
-        width: 95%;
-        margin: 25px auto; /* Чуть больше отступов */
+    body {
+        padding-bottom: 0; 
+        margin-bottom: 20px; 
+        overflow-y: auto; 
+        font-size: 1rem; 
+        padding-bottom: 50px; 
     }
-
-    #spectrogram {
-        width: calc(95% - 10px);
-        margin: 25px auto; 
+    html, body {
+            height: auto;
+            min-height: 100vh;
     }
-
+    h2, button, #spectrogram, table {
+        margin-bottom: 10px; 
+    }
+    h2 {
+        font-size: 28px;
+    }
+    table, #spectrogram {
+        width: 90%; 
+        max-width: 100%;
+        margin: 15px auto;
+    }
     button {
-        margin: 15px;
+        width: 80%; 
+        max-width: 240px; 
+        height: 50px;
+        font-size: 16px;
+    }
+    table {
+        table-layout: fixed; 
+        width: 100%;
+    }
+    td {
+        word-break: break-word;
+        white-space: normal; 
+        padding: 10px;
+        font-size: 16px; 
+        line-height: 1.4; 
     }
 }
 
@@ -286,3 +321,4 @@ td[colspan] {
         margin: 30px;
     }
 }
+
