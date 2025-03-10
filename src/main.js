@@ -136,7 +136,17 @@ async function init() {
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
                 mostProbableContainerVC.innerHTML = classLabels[maxScoreIndex];
-                
+
+
+        setTimeout(() => {
+            mostProbableContainerVC.style.opacity = "0.5"; 
+        }, 2000); 
+
+                setTimeout(() => {
+            mostProbableContainerVC.innerHTML = "Не визначено";
+            mostProbableContainerVC.style.opacity = "1"; 
+        }, 4000);
+
             }
 
     }, {
@@ -157,6 +167,7 @@ async function init() {
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
             mostProbableContainerHigh.innerHTML = classLabels[maxScoreIndex];
+            
         }
     }, {
         includeSpectrogram: false, // in case listen should return result.spectrogram
@@ -405,7 +416,8 @@ style.textContent = `
 
 @keyframes glowEffect {
     0% { color: rgb(0, 255, 200); text-shadow: 0 0 15px rgba(0, 255, 200, 0.8); }
-    100% { color: rgb(187, 163, 254); text-shadow: 0 0 25px rgba(120, 70, 255, 0.6); }
+    50% { color: rgb(189, 233, 254); text-shadow: 0 0 25px rgba(120, 70, 255, 0.6); }
+    100% { color: rgb(255, 255, 255); text-shadow: 0 0 25px rgba(255, 255, 255, 0.6); }
 }
 `;
 document.head.appendChild(style);
