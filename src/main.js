@@ -62,9 +62,10 @@ async function init() {
         if (result.spectrogram) {
             drawSpectrogram(result.spectrogram, canvasElem);
         } else {
-            console.log("No spectrogram received in result");
-        }
-    }, {
+            setTimeout(() => drawSpectrogram(result.spectrogram, canvasElem), 700);
+        }}, 
+    
+    {
         includeSpectrogram: true,
         probabilityThreshold: 0.7,
         invokeCallbackOnNoiseAndUnknown: false,
@@ -134,10 +135,9 @@ async function init() {
 
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
-            mostProbableContainerVC.innerHTML = classLabels[maxScoreIndex];
-
-            drawSpectrogram(result.spectrogram, canvasElem);
-        }
+                mostProbableContainerVC.innerHTML = classLabels[maxScoreIndex];
+                
+            }
 
     }, {
         includeSpectrogram: true, // in case listen should return result.spectrogram
@@ -157,13 +157,12 @@ async function init() {
         if (classLabels[maxScoreIndex] !== "Background Noise") {
             console.log(classLabels[maxScoreIndex]);
             mostProbableContainerHigh.innerHTML = classLabels[maxScoreIndex];
-
         }
     }, {
         includeSpectrogram: false, // in case listen should return result.spectrogram
         probabilityThreshold: 0.5,
         invokeCallbackOnNoiseAndUnknown: false,
-        overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
+        overlapFactor: 0.75 // probably want between 0.5 and 0.75. More info in README
     });
 
     recognizerVowelsRow.listen(result => {
@@ -182,7 +181,7 @@ async function init() {
         includeSpectrogram: false, // in case listen should return result.spectrogram
         probabilityThreshold: 0.5,
         invokeCallbackOnNoiseAndUnknown: false,
-        overlapFactor: 0.50 // probably want between 0.5 and 0.75. More info in README
+        overlapFactor: 0.75 // probably want between 0.5 and 0.75. More info in README
     });
 
     recognizerZybniGybni.listen(result => {
@@ -200,7 +199,7 @@ async function init() {
         includeSpectrogram: false,
         probabilityThreshold: 0.5,
         invokeCallbackOnNoiseAndUnknown: false,
-        overlapFactor: 0.50
+        overlapFactor: 0.75
     });
 
     recognizerGlyhiDzvinki.listen(result => {
@@ -218,7 +217,7 @@ async function init() {
         includeSpectrogram: false,
         probabilityThreshold: 0.5,
         invokeCallbackOnNoiseAndUnknown: false,
-        overlapFactor: 0.50
+        overlapFactor: 0.75
     });
 }
 
@@ -410,3 +409,4 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+
