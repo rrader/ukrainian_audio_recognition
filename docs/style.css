@@ -171,9 +171,10 @@ th {
 .inactive {
     background: #6c757d;
     color: white;
-    transition: background 0.5s ease-in-out, color 0.5s ease-in-out;
+    transition: background 0.5s ease-in-out, color 3s ease-in-out;
     box-shadow: 0 0 15px rgba(108, 117, 125, 0.5);
     font-size: 18px;
+    
 }
 
 
